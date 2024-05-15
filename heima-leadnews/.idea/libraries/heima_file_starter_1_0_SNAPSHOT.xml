@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="heima-file-starter-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/heima-leadnews-service/heima-leadnews-wemedia/src/main/resources/lib/heima-file-starter-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

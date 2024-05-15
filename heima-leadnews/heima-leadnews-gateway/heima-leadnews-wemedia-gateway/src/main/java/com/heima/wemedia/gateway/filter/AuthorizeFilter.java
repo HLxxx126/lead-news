@@ -1,7 +1,7 @@
-package com.heima.app.gateway.filter;
+package com.heima.wemedia.gateway.filter;
 
 
-import com.heima.app.gateway.util.AppJwtUtil;
+import com.heima.wemedia.gateway.util.AppJwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -30,7 +30,6 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
             return chain.filter(exchange);
         }
 
-
         //3.获取token
         String token = request.getHeaders().getFirst("token");
 
@@ -49,11 +48,17 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
+            //ユーザー情報を取得します
+            Object userId = claimsBody.get("id");
+            //ヘッダーに保存します
+            ServerHttpRequest serverHttpRequest = request.mutate().headers(httpHeaders -> {
+                httpHeaders.add("userId", userId + "");
+            }).build();
+            //リクエストをリセットします
+            exchange.mutate().request(serverHttpRequest);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            return response.setComplete();
         }
 
         //6.放行
