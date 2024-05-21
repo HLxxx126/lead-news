@@ -23,6 +23,7 @@ import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
 import com.heima.wemedia.service.WmNewsService;
+import com.heima.wemedia.service.WmNewsTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -74,7 +75,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
     @Autowired
     private WmNewsAutoScanService wmNewsAutoScanService;
-
+    @Autowired
+    private WmNewsTaskService wmNewsTaskService;
     /**
      * 文章を公開、編集、または下書きとして保存する
      *
@@ -110,7 +112,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         //下書きでない場合、文章表紙の画像と素材の関係を保存します  現在のレイアウトが自動である場合、カバー画像を一致させる必要があります
         saveRelativeInfoForCover(dto, wmNews, materials);
         //审核文章
-        wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
+     //   wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
+        wmNewsTaskService.addNewsToTask(wmNews.getId(),wmNews.getPublishTime());
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
